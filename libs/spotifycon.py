@@ -1,8 +1,5 @@
-import asyncio
 import os
 import spotipy
-import asyncio
-from spotipy.oauth2 import SpotifyClientCredentials
 
 #SETUP SPOTIFY
 spotify_client_id = os.getenv('SPOTIPY_CLIENT_ID')

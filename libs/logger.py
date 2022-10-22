@@ -1,6 +1,5 @@
 # Log Debug coloring
-from colorama import init, Fore, Back, Style
-from termcolor import colored
+from colorama import init, Fore
 
 class Logger():
 	def __init__(self,name,color):

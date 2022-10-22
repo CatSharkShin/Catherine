@@ -1,13 +1,8 @@
 from PIL import Image
 import math
 import numpy as np
-import yaml
 import imghdr
 import os
-import shutil
-import sys
-import subprocess
-import cv2
 import time
 
 

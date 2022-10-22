@@ -5,7 +5,6 @@ from html.parser import HTMLParser
 
 # Image processing
 import io
-import imageio
 from PIL import Image, ImageOps, ImageFile
 
 # File saving etc.
