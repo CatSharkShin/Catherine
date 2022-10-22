@@ -1,0 +1,31 @@
+import asyncio
+import os
+import spotipy
+import asyncio
+from spotipy.oauth2 import SpotifyClientCredentials
+
+#SETUP SPOTIFY
+spotify_client_id = os.getenv('SPOTIPY_CLIENT_ID')
+spotify_secret = os.getenv('SPOTIPY_CLIENT_SECRET')
+spotify_redirect_uri = "http://localhost:8080/"
+scope = "user-read-currently-playing app-remote-control streaming"
+username = "o9obimakpi51kewtlal1zt20j"
+oauth = spotipy.SpotifyOAuth(
+	client_id=spotify_client_id,
+	client_secret=spotify_secret,
+	redirect_uri=spotify_redirect_uri,
+	scope=scope
+	)
+
+#tokeninfo = oauth.get_cached_token()
+#token = ""
+#token = tokeninfo['access_token']
+#spotify = spotipy.Spotify(auth=token, auth_manager=
+spotify = spotipy.Spotify(auth_manager=oauth)
+#spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+
+#tokeninfo = oauth.get_cached_token()
+
+#if oauth.is_token_expired(tokeninfo):
+#		token = oauth.get_access_token(oauth.get_authorization_code())
+#		spotify.set_auth(token)
