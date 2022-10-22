@@ -1,3 +1,4 @@
+discord
 requests
 spotipy
 python-dotenv
