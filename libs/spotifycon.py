@@ -14,12 +14,15 @@ oauth = spotipy.SpotifyOAuth(
 	scope=scope,
 	open_browser=False
 	)
-
+clientcreds = spotipy.SpotifyClientCredentials(
+	client_id=spotify_client_id,
+	client_secret=spotify_secret
+)
 #tokeninfo = oauth.get_cached_token()
 #token = ""
 #token = tokeninfo['access_token']
 #spotify = spotipy.Spotify(auth=token, auth_manager=
-spotify = spotipy.Spotify(auth_manager=oauth)
+spotify = spotipy.Spotify(auth_manager=clientcreds)
 #spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 #tokeninfo = oauth.get_cached_token()
