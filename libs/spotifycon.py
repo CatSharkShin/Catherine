@@ -11,7 +11,8 @@ oauth = spotipy.SpotifyOAuth(
 	client_id=spotify_client_id,
 	client_secret=spotify_secret,
 	redirect_uri=spotify_redirect_uri,
-	scope=scope
+	scope=scope,
+	open_browser=False
 	)
 
 #tokeninfo = oauth.get_cached_token()
