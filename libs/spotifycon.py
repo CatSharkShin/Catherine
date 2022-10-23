@@ -4,7 +4,7 @@ import spotipy
 #SETUP SPOTIFY
 spotify_client_id = os.getenv('SPOTIPY_CLIENT_ID')
 spotify_secret = os.getenv('SPOTIPY_CLIENT_SECRET')
-spotify_redirect_uri = "http://localhost:8080/"
+spotify_redirect_uri = "http://0.0.0.0:8080/"
 scope = "user-read-currently-playing app-remote-control streaming"
 username = "o9obimakpi51kewtlal1zt20j"
 oauth = spotipy.SpotifyOAuth(

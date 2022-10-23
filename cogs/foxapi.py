@@ -88,6 +88,7 @@ class FoxApi(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_ready(self):
+		logger.log(f"Starting FoxApi")
 		await websockets.serve(ws.server,"127.0.0.1",PORT)
 
 		self.songUpdate.start()
