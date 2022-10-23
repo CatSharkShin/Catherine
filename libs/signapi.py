@@ -105,16 +105,18 @@ def is_grey_scale(img):
 	return True
 
 class SignContainer:
-	def __init__(self,sign,greyscales=None,onlynamed=False):
+	def __init__(self,sign,logcallback,greyscales=None,onlynamed=False):
 		#Settings
 		self.sign = sign
 		self.greyscales = greyscales
 		self.onlynamed = onlynamed
 
+		#callback
+		self.logcallback = logcallback
+
 		#Fetch
 		self.image_groups = []
 		self.gifs = []
-
 		self.hints = []
 
 		#Idk yet
@@ -125,7 +127,7 @@ class SignContainer:
 		for file in files:
 			os.remove(file)
 
-	def get_gifs(self,include=["downloaded_gif","generated_gif"]):
+	async def get_gifs(self,include=["downloaded_gif","generated_gif"]):
 		cache = "__signcache__/"
 		# Gives back paths to the gifs
 
@@ -135,12 +137,12 @@ class SignContainer:
 		#Fetch if needed
 		if getdownloaded and not self.gifs:
 			if getgenerated and not self.image_groups:
-				self.fetch()
+				await self.fetch()
 			else:
-				self.fetch(getimages=False)
+				await self.fetch(getimages=False)
 		else:
 			if getgenerated and not self.image_groups:
-				self.fetch(getgifs=False)
+				await self.fetch(getgifs=False)
 
 		#Download if needed
 		if not self.downloaded:
@@ -153,24 +155,27 @@ class SignContainer:
 
 		# check if they are files, and if any item of "include" is in its filename
 		files = [f for f in listdir(cache) if (isfile(join(cache, f)) and len([i for i in include if i in f]) > 0 )]
+		await self.logcallback(f"Found {len(files)} files")
 		return iter(files)
 
 
 	#Returns an array of io.BytesIO()
-	def get_images(self):
+	async def get_images(self):
 
 		#Fetch if needed
 		if not self.image_groups:
-			self.fetch(getgifs = False)
+			await self.fetch(getgifs = False)
 
 		images = []
 		for image_group in self.image_groups:
-			images.extend(image_group.get_images())
+			images.extend(await image_group.get_images())
+		print(len(images))
+		await self.logcallback(f"Found {len(images)} files")
 		return images
 
 
 	#Parses lifeprint.com for the sign set. Fills up this container
-	def fetch(self,getgifs=True,getimages=True):
+	async def fetch(self,getgifs=True,getimages=True):
 		r = requests.get(f"https://lifeprint.com/asl101/index/{self.sign[0]}.htm")
 		groupParser = MyHTMLParser()
 		groupParser.feed(r.text)
@@ -179,14 +184,18 @@ class SignContainer:
 			self.hints.append('compound')
 		if src is None:
 			print("[SignAPI] Sign not found")
+			await self.logcallback("Sign not found%")
 		else:
 			print("[SignAPI] Sign found")
+			await self.logcallback("Sign found! Please wait~")
 			link = "https://lifeprint.com/asl101"+src['attrs']['href'][2:]
 			# Get the site and parse it:
+			await self.logcallback(f"Downloading...")
 			r = requests.get(link)
 			siteParser = MyHTMLParser()
 			siteParser.feed(r.text)
 			lastImageSize = None
+			await self.logcallback(f"Processing {len(siteParser.elements)} elements...")
 			for element in siteParser.elements:
 				# If its an img tag
 				if(element['tag'] == 'img'):
@@ -216,9 +225,10 @@ class SignContainer:
 						# Append the last image group created with the image
 						self.image_groups[len(self.image_groups)-1].urls.append(imglink)
 						lastImageSize = currentImageSize
+			await self.logcallback(f"Processing done")
 	@property
-	def images(self):
-		return self.get_images()
+	async def images(self):
+		return await self.get_images()
 
 class SignGif:
 	def __init__(self,container: SignContainer,url):

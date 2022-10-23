@@ -22,7 +22,7 @@ clientcreds = spotipy.SpotifyClientCredentials(
 #token = ""
 #token = tokeninfo['access_token']
 #spotify = spotipy.Spotify(auth=token, auth_manager=
-spotify = spotipy.Spotify(auth_manager=clientcreds)
+spotify = spotipy.Spotify(auth_manager=oauth)
 #spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
 #tokeninfo = oauth.get_cached_token()

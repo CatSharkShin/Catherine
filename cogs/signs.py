@@ -18,14 +18,17 @@ class Signs(commands.Cog):
 
 	@commands.command(name="sign")
 	async def sign(self, ctx, sign, type):
-		signApi = signs.SignContainer(sign)
+		async def respond(msg):
+			await ctx.send(msg)
+		signApi = signs.SignContainer(sign,respond)
 		logger.log(type)
 		if type == "gif":
-			for file in signApi.get_gifs():
+			for file in await signApi.get_gifs():
 				await ctx.send(file=File(filename="gif.gif", fp="./__signcache__/"+file))
 		if type == "img":
-			for file in signApi.get_images():
+			for file in await signApi.get_images():
 				await ctx.send(file=File(filename="image.png", fp=file))
+
 
 
 async def setup(client):
